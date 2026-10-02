@@ -1,0 +1,63 @@
+project:
+  name: "Melanoma_Epigenetic_States"
+  seed: 42
+
+paths:
+  data: "data"
+  results: "results"
+  rds: "results/rds"
+  figures: "results/figures"
+  tables: "results/tables"
+  python: "python"
+
+tcga:
+  project: "TCGA-SKCM"
+  # UCSC Xena dataset IDs
+  rna_xena: "TCGA.SKCM.sampleMap/HiSeqV2"
+  meth_xena: "TCGA.SKCM.sampleMap/HumanMethylation450"
+  clinical_xena: "TCGA.SKCM.sampleMap/SKCM_clinicalMatrix"
+  mutation_xena: "TCGA.SKCM.sampleMap/mutation_curated_wustl_gene"
+  cnv_xena: "TCGA.SKCM.sampleMap/Gistic2_CopyNumber_Gistic2_all_data_by_genes"
+
+qc:
+  rna:
+    min_count: 10
+    min_samples_fraction: 0.1
+  methylation:
+    max_missing_fraction: 0.2
+    imputation_k: 10
+    remove_sex_chr: true
+    remove_cross_reactive: true
+
+meth_expr:
+  min_abs_rho: 0.3
+  fdr_threshold: 0.05
+
+feature_selection:
+  variance_percentile: 0.50
+  univariate_cox_p: 0.05
+  lasso_alpha: 1.0 # 1.0 for standard LASSO
+  cv_folds: 3
+  lambda_rule: "lambda.min"
+
+clustering:
+  max_k: 8
+  reps: 100
+  algorithm: "agglomerative"
+  distance: "euclidean"
+  linkage: "ward"
+
+pathway:
+  min_set_size: 15
+  max_set_size: 500
+  method: "ssgsea"
+
+survival:
+  time_points_years: [1, 2, 3, 5]
+
+validation:
+  bootstrap_n: 1000
+
+depmap:
+  dependency_threshold: -0.5
+  essential_threshold: -1.0
